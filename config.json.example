@@ -1,0 +1,10 @@
+{
+  "url": "https://test.url.com",
+  "token": "abcdefghij123456",
+  "project": 123,
+  "labels": [
+    "new"
+  ],
+  "port": 3000,
+  "origin": "http://localhost"
+}
