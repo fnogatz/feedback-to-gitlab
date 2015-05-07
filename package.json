@@ -1,6 +1,6 @@
 {
   "name": "feedback-to-gitlab",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Server to generate Gitlab issues for user feedback",
   "main": "server.js",
   "scripts": {
