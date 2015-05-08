@@ -1,6 +1,6 @@
 {
   "name": "feedback-to-gitlab",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Express middleware to generate Gitlab issues from visual user feedback",
   "main": "index.js",
   "scripts": {
