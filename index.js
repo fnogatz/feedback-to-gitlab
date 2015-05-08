@@ -47,9 +47,16 @@ function feedback (options) {
       filepath = options.store.path.replace(/^\//, '').replace(/\/$/, '') + '/'
     }
     filepath += filename
+    var content = req.body.img.replace(/^data:([A-Za-z-+\/]+);base64,/, '')
 
     var screenshotUrl = options.url + '/' + options.store.repository.slug + '/raw/' + options.store.branch + '/' + filepath
     var issue = generateIssue(req.body, screenshotUrl, options)
+
+    res.json({
+      result: 'OK'
+    })
+
+    next(null)
 
     gitlab.issues.create(options.repository.id, issue, function (data) {
       var issueId = data.iid
@@ -59,18 +66,12 @@ function feedback (options) {
         file_path: filepath,
         branch_name: options.store.branch,
         encoding: 'base64',
-        content: req.body.img.replace(/^data:([A-Za-z-+\/]+);base64,/, ''),
+        content: content,
         commit_message: 'Screenshot for Issue #' + issueId
       }, function (data) {
         console.log('Issue #' + issueId + ' created')
       })
     })
-
-    res.json({
-      result: 'OK'
-    })
-
-    next(null)
   }
 
   return function (req, res, next) {
