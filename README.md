@@ -35,6 +35,8 @@ jQuery.feedback({
 })
 ```
 
+A method do run `feedback-to-gitlab` in a docker container is described in the [wiki](https://github.com/fnogatz/feedback-to-gitlab/wiki/Docker).
+
 ## Configuration
 
 ### url (String, required)
@@ -84,4 +86,3 @@ Directory where the screenshots will be stored in the repository.
 Limit the file size of the screenshot.
 
 `Default: '1mb'`
-
