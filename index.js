@@ -124,6 +124,7 @@ function generateIssue (body, url, options) {
   var now = new Date()
 
   var description = [
+    options.mention ? options.mention : '',
     body.note,
     '',
     '## Browser Information',
