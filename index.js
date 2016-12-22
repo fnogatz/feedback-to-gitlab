@@ -39,7 +39,7 @@ function feedback (options) {
 
   function handler (req, res, next) {
     // parse JSON body
-    bodyParser.json({ limit: options.store.limit }).call(this, req, res, next)
+    bodyParser.json({ limit: options.store.limit }).call(this, req, res, function(){})
 
     var filename = (new Date()).toJSON().replace('.', '-').replace(/:/g, '') + '.png'
     var filepath = ''
@@ -55,8 +55,6 @@ function feedback (options) {
     res.json({
       result: 'OK'
     })
-
-    next(null)
 
     gitlab.issues.create(options.repository.id, issue, function (data) {
       var issueId = data.iid
