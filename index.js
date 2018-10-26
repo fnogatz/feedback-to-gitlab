@@ -1,12 +1,12 @@
 'use strict';
 
-const Gitlab = require('gitlab');
+const Gitlab = require('gitlab/dist/es5').default;
 const bodyParser = require('body-parser');
 
 const requiredOptions = ['url', 'token', 'repository'];
 
 function getRepositoryObject(identifier, gitlab, callback) {
-    gitlab.projects.all((repos) => {
+    gitlab.Projects.all().then((repos) => {
         let i;
         if (typeof identifier === 'string') {
             for (i = 0; i < repos.length; i++) {
@@ -104,7 +104,7 @@ function feedback(_options) {
     if (options.auth) {
         gitlabConfig.auth = [options.auth.user, options.auth.password];
     }
-    const gitlab = Gitlab(gitlabConfig);
+    const gitlab = new Gitlab(gitlabConfig);
 
     getRepositoryObject(options.repository, gitlab, (obj) => {
         options.repository = obj;
@@ -132,17 +132,14 @@ function feedback(_options) {
             result: 'OK',
         });
 
-        gitlab.issues.create(options.repository.id, issue, (data) => {
+        gitlab.Issues.create(options.repository.id, issue).then((data) => {
             const issueId = data.iid;
 
-            gitlab.projects.repository.createFile({
-                projectId: options.store.repository.id,
-                file_path: filepath,
-                branch_name: options.store.branch,
+            gitlab.RepositoryFiles.create(options.store.repository.id, filepath, options.store.branch, {
                 encoding: 'base64',
                 content,
                 commit_message: `Screenshot for Issue #${issueId}`,
-            }, () => {
+            }).then(() => {
                 console.log(`Issue #${issueId} created`);
             });
         });
