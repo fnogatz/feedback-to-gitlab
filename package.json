@@ -29,6 +29,6 @@
   },
   "devDependencies": {
     "express": "^4.16.4",
-    "standard": "^3.7.3"
+    "standard": "^12.0.1"
   }
 }

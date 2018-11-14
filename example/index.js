@@ -29,7 +29,7 @@ app.post('/feedback', function (req, res, next) {
   return handler(req, res, next)
 })
 
-var port = process.env.PORT || 8080;
+var port = process.env.PORT || 8080
 app.listen(port, function () {
-  console.log('Open http://localhost:' + port);
+  console.log('Open http://localhost:' + port)
 })

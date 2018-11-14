@@ -40,7 +40,7 @@ function feedback (options) {
       filepath = options.store.path.replace(/^\//, '').replace(/\/$/, '') + '/'
     }
     filepath += filename
-    var content = req.body.img.replace(/^data:([A-Za-z-+\/]+);base64,/, '')
+    var content = req.body.img.replace(/^data:([A-Za-z-+/]+);base64,/, '')
 
     var screenshotUrl = options.url + '/' + options.store.repository.slug + '/raw/' + options.store.branch + '/' + filepath
     var issue = generateIssue(req.body, screenshotUrl, options)
@@ -71,10 +71,10 @@ function feedback (options) {
 
       var self = this
 
-      getRepositoryObject(options.repository, gitlab, function (obj) {
+      getRepositoryObject(options.repository, gitlab, function (_err, obj) {
         options.repository = obj
 
-        getRepositoryObject(options.store.repository, gitlab, function (obj) {
+        getRepositoryObject(options.store.repository, gitlab, function (_err, obj) {
           options.store.repository = obj
 
           handler.call(self, req, res, next)
@@ -90,7 +90,7 @@ function getRepositoryObject (identifier, gitlab, callback) {
     if (typeof identifier === 'string') {
       for (i = 0; i < repos.length; i++) {
         if (repos[i].path_with_namespace === identifier.replace(/ /g, '')) {
-          callback({
+          callback(null, {
             id: repos[i].id,
             slug: repos[i].path_with_namespace
           })
@@ -100,7 +100,7 @@ function getRepositoryObject (identifier, gitlab, callback) {
     } else if (typeof identifier === 'number') {
       for (i = 0; i < repos.length; i++) {
         if (repos[i].id === identifier) {
-          callback({
+          callback(null, {
             id: repos[i].id,
             slug: repos[i].path_with_namespace
           })
