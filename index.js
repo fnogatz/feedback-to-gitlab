@@ -1,6 +1,6 @@
 module.exports = feedback
 
-var Gitlab = require('gitlab')
+var Gitlab = require('gitlab/dist/es5').default
 var bodyParser = require('body-parser')
 
 var requiredOptions = [ 'url', 'token', 'repository' ]
@@ -28,14 +28,7 @@ function feedback (options) {
   if (options.auth) {
     gitlabConfig.auth = [ options.auth.user, options.auth.password ]
   }
-  var gitlab = Gitlab(gitlabConfig)
-
-  getRepositoryObject(options.repository, gitlab, function (obj) {
-    options.repository = obj
-  })
-  getRepositoryObject(options.store.repository, gitlab, function (obj) {
-    options.store.repository = obj
-  })
+  var gitlab = new Gitlab(gitlabConfig)
 
   function handler (req, res, next) {
     // parse JSON body
@@ -58,17 +51,14 @@ function feedback (options) {
 
     next(null)
 
-    gitlab.issues.create(options.repository.id, issue, function (data) {
+    gitlab.Issues.create(options.repository.id, issue).then(function (data) {
       var issueId = data.iid
 
-      gitlab.projects.repository.createFile({
-        projectId: options.store.repository.id,
-        file_path: filepath,
-        branch_name: options.store.branch,
+      gitlab.RepositoryFiles.create(options.store.repository.id, filepath, options.store.branch, {
         encoding: 'base64',
         content: content,
         commit_message: 'Screenshot for Issue #' + issueId
-      }, function (data) {
+      }).then(function (data) {
         console.log('Issue #' + issueId + ' created')
       })
     })
@@ -81,13 +71,23 @@ function feedback (options) {
         return
       }
 
-      handler.call(this, req, res, next)
+      var self = this
+
+      getRepositoryObject(options.repository, gitlab, function (obj) {
+        options.repository = obj
+
+        getRepositoryObject(options.store.repository, gitlab, function (obj) {
+          options.store.repository = obj
+
+          handler.call(self, req, res, next)
+        })
+      })
     })
   }
 }
 
 function getRepositoryObject (identifier, gitlab, callback) {
-  gitlab.projects.all(function (repos) {
+  gitlab.Projects.all().then(function (repos) {
     var i
     if (typeof identifier === 'string') {
       for (i = 0; i < repos.length; i++) {
