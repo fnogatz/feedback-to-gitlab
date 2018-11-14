@@ -4,7 +4,7 @@
   "description": "Express middleware to generate Gitlab issues from visual user feedback",
   "main": "index.js",
   "scripts": {
-    "start": "node example/index.js",
+    "start": "node example/server.js",
     "test": "standard"
   },
   "repository": {
