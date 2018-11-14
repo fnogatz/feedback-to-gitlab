@@ -1,0 +1,40 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Example: feedback-to-gitlab</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="ivoviz/feedback.css">
+    <script src="ivoviz/feedback.min.js"></script>
+  </head>
+  <body>
+  	<h1>Example: feedback-to-gitlab</h1>
+
+    <h3>GitLab Settings</h3>
+    <label for="url">GitLab URL:</label>
+    <input type="text" id="url" name="url" value="https://gitlab.url.com" />
+
+    <label for="token">Token:</label>
+    <input type="text" id="token" name="token" value="abcdefghij123456" />
+
+    <label for="repository">Repository:</label>
+    <input type="text" id="repository" name="repository" value="some/repo" />
+
+    <script type="text/javascript">
+        jQuery.feedback({
+            ajaxURL: 'http://localhost:8080/feedback',
+            html2canvasURL: 'ivoviz/html2canvas.min.js'
+        })
+        setUrl()
+
+        $('#url').change(setUrl)
+        $('#token').change(setUrl)
+        $('#repository').change(setUrl)
+
+        function setUrl () {
+            window.location.href = window.location.href.split('#')[0] + '#url=' + encodeURI($('#url').val()) + '&token=' + $('#token').val() + '&repository=' + encodeURI($('#repository').val())
+        }
+    </script>
+  </body>
+</html>

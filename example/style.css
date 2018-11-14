@@ -1,0 +1,19 @@
+label {
+  display: block;
+}
+
+input {
+  margin: 5px 0 20px 0;
+  width: 250px;
+}
+
+#feedback {
+  position: fixed;
+  top: 30px;
+  right: 30px;
+  padding: 20px 30px;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  background: red;
+}

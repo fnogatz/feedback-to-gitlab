@@ -4,6 +4,7 @@
   "description": "Express middleware to generate Gitlab issues from visual user feedback",
   "main": "index.js",
   "scripts": {
+    "start": "node example/index.js",
     "test": "standard"
   },
   "repository": {
@@ -27,6 +28,7 @@
     "gitlab": "^4.2.1"
   },
   "devDependencies": {
+    "express": "^4.16.4",
     "standard": "^3.7.3"
   }
 }
