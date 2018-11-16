@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/fnogatz/feedback-to-gitlab",
   "dependencies": {
-    "body-parser": "^1.12.3",
+    "body-parser": "^1.18.3",
     "gitlab": "^4.2.1"
   },
   "devDependencies": {
