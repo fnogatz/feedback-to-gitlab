@@ -3,12 +3,12 @@ module.exports = feedback
 var Gitlab = require('gitlab/dist/es5').default
 var bodyParser = require('body-parser')
 
-var requiredOptions = [ 'url', 'token', 'repository' ]
+var requiredOptions = ['url', 'token', 'repository']
 
 function feedback (options) {
   options = options || {}
   options.auth = options.auth || null
-  options.labels = options.labels || [ 'new' ]
+  options.labels = options.labels || ['new']
   options.store = options.store || {}
   options.store.repository = options.store.repository || options.repository
   options.store.branch = options.store.branch || 'master'
@@ -26,7 +26,7 @@ function feedback (options) {
     token: options.token
   }
   if (options.auth) {
-    gitlabConfig.auth = [ options.auth.user, options.auth.password ]
+    gitlabConfig.auth = [options.auth.user, options.auth.password]
   }
   var gitlab = new Gitlab(gitlabConfig)
 
