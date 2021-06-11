@@ -1,9 +1,9 @@
 module.exports = feedback
 
-var Gitlab = require('gitlab/dist/es5').default
-var bodyParser = require('body-parser')
+const Gitlab = require('gitlab/dist/es5').default
+const bodyParser = require('body-parser')
 
-var requiredOptions = ['url', 'token', 'repository']
+const requiredOptions = ['url', 'token', 'repository']
 
 function feedback (options) {
   options = options || {}
@@ -21,36 +21,36 @@ function feedback (options) {
     }
   })
 
-  var gitlabConfig = {
+  const gitlabConfig = {
     url: options.url,
     token: options.token
   }
   if (options.auth) {
     gitlabConfig.auth = [options.auth.user, options.auth.password]
   }
-  var gitlab = new Gitlab(gitlabConfig)
+  const gitlab = new Gitlab(gitlabConfig)
 
   function handler (req, res, next) {
     // parse JSON body
     bodyParser.json({ limit: options.store.limit }).call(this, req, res, function () {})
 
-    var filename = (new Date()).toJSON().replace('.', '-').replace(/:/g, '') + '.png'
-    var filepath = ''
+    const filename = (new Date()).toJSON().replace('.', '-').replace(/:/g, '') + '.png'
+    let filepath = ''
     if (options.store.path !== '') {
       filepath = options.store.path.replace(/^\//, '').replace(/\/$/, '') + '/'
     }
     filepath += filename
-    var content = req.body.img.replace(/^data:([A-Za-z-+/]+);base64,/, '')
+    const content = req.body.img.replace(/^data:([A-Za-z-+/]+);base64,/, '')
 
-    var screenshotUrl = options.url + '/' + options.store.repository.slug + '/raw/' + options.store.branch + '/' + filepath
-    var issue = generateIssue(req.body, screenshotUrl, options)
+    const screenshotUrl = options.url + '/' + options.store.repository.slug + '/raw/' + options.store.branch + '/' + filepath
+    const issue = generateIssue(req.body, screenshotUrl, options)
 
     res.json({
       result: 'OK'
     })
 
     gitlab.Issues.create(options.repository.id, issue).then(function (data) {
-      var issueId = data.iid
+      const issueId = data.iid
 
       gitlab.RepositoryFiles.create(options.store.repository.id, filepath, options.store.branch, {
         encoding: 'base64',
@@ -69,7 +69,7 @@ function feedback (options) {
         return
       }
 
-      var self = this
+      const self = this
 
       getRepositoryObject(options.repository, gitlab, function (_err, obj) {
         options.repository = obj
@@ -86,7 +86,7 @@ function feedback (options) {
 
 function getRepositoryObject (identifier, gitlab, callback) {
   gitlab.Projects.all().then(function (repos) {
-    var i
+    let i
     if (typeof identifier === 'string') {
       for (i = 0; i < repos.length; i++) {
         if (repos[i].path_with_namespace === identifier.replace(/ /g, '')) {
@@ -121,9 +121,9 @@ function getRepositoryObject (identifier, gitlab, callback) {
  * @return {Object}          object that can be used by gitlab.issue.create()
  */
 function generateIssue (body, url, options) {
-  var now = new Date()
+  const now = new Date()
 
-  var description = [
+  let description = [
     body.note,
     '',
     '## Browser Information',
@@ -148,7 +148,7 @@ function generateIssue (body, url, options) {
     '![Screenshot](' + url + ')'
   ])
 
-  var issue = {
+  const issue = {
     title: body.note.slice(0, 30),
     description: description.join('\n'),
     labels: options.labels.join(',')
